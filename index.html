@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADI Staff Design Evaluation Engineer — Interview Cheat Sheet</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --surface: #f5f6f8;
+    --border: #e0e3e8;
+    --text: #1a1c1f;
+    --muted: #5c636e;
+    --accent: #0a66cf;
+    --accent-soft: #e7f0fb;
+    --ok: #0a7d3c;
+    --warn: #b25000;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16181c;
+      --surface: #1e2126;
+      --border: #2e333b;
+      --text: #e6e8eb;
+      --muted: #9aa1ac;
+      --accent: #5aa9ff;
+      --accent-soft: #1d2c3f;
+      --ok: #4cc57e;
+      --warn: #e39a4a;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding: 0 0 4rem;
+  }
+  header {
+    padding: 1.4rem 1.1rem 1.1rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+  header h1 { margin: 0 0 .25rem; font-size: 1.15rem; line-height: 1.3; }
+  header p { margin: 0; color: var(--muted); font-size: .85rem; }
+  main { padding: 0 1.1rem; max-width: 820px; margin: 0 auto; }
+  section { border-bottom: 1px solid var(--border); }
+  details { padding: .3rem 0; }
+  summary {
+    cursor: pointer;
+    list-style: none;
+    padding: .9rem .2rem;
+    font-weight: 650;
+    font-size: 1.02rem;
+    display: flex;
+    align-items: baseline;
+    gap: .5rem;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::before {
+    content: "\25B8";
+    color: var(--accent);
+    font-size: .8rem;
+    transition: transform .15s;
+  }
+  details[open] > summary::before { transform: rotate(90deg); }
+  .body { padding: 0 .2rem 1rem; }
+  h3 { font-size: .95rem; margin: 1.1rem 0 .4rem; color: var(--accent); }
+  h3:first-child { margin-top: .2rem; }
+  p, li { font-size: .92rem; }
+  ul, ol { padding-left: 1.2rem; margin: .4rem 0; }
+  li { margin: .3rem 0; }
+  code {
+    background: var(--accent-soft);
+    padding: .08em .35em;
+    border-radius: 4px;
+    font-size: .86em;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .tbl { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: .6rem 0; }
+  table { border-collapse: collapse; width: 100%; min-width: 460px; font-size: .85rem; }
+  th, td { text-align: left; padding: .5rem .6rem; border: 1px solid var(--border); vertical-align: top; }
+  th { background: var(--surface); font-weight: 650; }
+  .tag { display: inline-block; font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; padding: .15em .5em; border-radius: 4px; }
+  .tag.strong { background: rgba(10,125,60,.15); color: var(--ok); }
+  .tag.gap { background: rgba(178,80,0,.15); color: var(--warn); }
+  blockquote {
+    margin: .6rem 0;
+    padding: .6rem .9rem;
+    border-left: 3px solid var(--accent);
+    background: var(--surface);
+    border-radius: 0 6px 6px 0;
+    font-size: .9rem;
+  }
+  .check li { list-style: none; position: relative; padding-left: 1.6rem; }
+  .check li::before {
+    content: "\2610";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 1.1rem;
+    line-height: 1.4;
+  }
+  .toolbar { display: flex; gap: .5rem; margin-top: .7rem; flex-wrap: wrap; }
+  .toolbar button {
+    font: inherit;
+    font-size: .8rem;
+    padding: .4rem .8rem;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  footer { padding: 2rem 1.1rem 0; color: var(--muted); font-size: .78rem; text-align: center; }
+  .formula { font-family: ui-monospace, Menlo, monospace; background: var(--surface); padding: .5rem .7rem; border-radius: 6px; display: inline-block; font-size: .85rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Staff Design Evaluation Engineer — Analog Devices</h1>
+  <p>Post-silicon validation cheat sheet · interview prep · Adarsh Ramakrishna</p>
+  <div class="toolbar">
+    <button onclick="document.querySelectorAll('details').forEach(d=>d.open=true)">Expand all</button>
+    <button onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">Collapse all</button>
+  </div>
+</header>
+<main>
+
+<section><details open>
+  <summary>1 · What "validation" means here</summary>
+  <div class="body">
+    <p><strong>Post-silicon validation (design evaluation):</strong> first silicon comes back from the fab and you prove it meets the datasheet in the real world — not in simulation. You build the eval board and test firmware/scripts, measure every spec across <strong>Process, Voltage, Temperature (PVT)</strong>, and feed results back to Design (bugs, margin) and to Product/Test Engineering (so ATE production test matches the bench).</p>
+
+    <h3>The lifecycle</h3>
+    <div class="tbl"><table>
+      <tr><th>Phase</th><th>What happens</th><th>Your deliverable</th></tr>
+      <tr><td>1. Pre-silicon prep</td><td>Wafer in fab (~8–12 wks): design eval board, write bring-up FW, draft the <strong>SCM plan</strong> (Silicon Characterization &amp; Measurement — every parameter, method, instrument, corner)</td><td>Eval HW, scripts, SCM plan</td></tr>
+      <tr><td>2. HW bring-up</td><td>Power bare board, check every rail / clock / reset / reference with DMM &amp; scope before the chip runs</td><td>Board sign-off</td></tr>
+      <tr><td>3. Silicon bring-up</td><td>Power device, confirm boot, JTAG/SWD connects, register read/write, basic I/O toggles</td><td>"It's alive" report</td></tr>
+      <tr><td>4. Functional validation</td><td>Exercise every block: ADC converts, DDR trains, PCIe links up, audio path passes signal, I²C/SPI/UART work at rated speed</td><td>Pass/fail per feature</td></tr>
+      <tr><td>5. Characterization (PVT)</td><td>Sweep each parameter over temp (−40/+25/+85/+125 °C), voltage (min/typ/max per rail), corner lots (SS/TT/FF). Produce <strong>shmoo plots</strong></td><td>Datasheet numbers + margin</td></tr>
+      <tr><td>6. Bench↔ATE correlation</td><td>Compare bench vs production tester; explain gaps (loading, cal, socket, guardband)</td><td>Correlation report</td></tr>
+      <tr><td>7. Production readiness</td><td>Support first lots, debug yield fallout, characterize returns</td><td>Release sign-off</td></tr>
+    </table></div>
+  </div>
+</details></section>
+
+<section><details>
+  <summary>2 · Worked example — new SoC bring-up</summary>
+  <div class="body">
+    <p><em>New SoC: ARM Cortex-M + on-chip 16-bit SAR ADC + DDR3 + stereo audio DAC. First silicon just arrived.</em></p>
+    <ol>
+      <li><strong>Rails first.</strong> No firmware. Confirm 1.8 / 1.1 / 3.3 V rails in tolerance, sequencing order correct on the scope, current draw sane (not shorted). Check internal 1.2 V reference on a test point.</li>
+      <li><strong>Clocks &amp; reset.</strong> Probe crystal start-up, PLL lock, reset de-assertion timing.</li>
+      <li><strong>Debug connect.</strong> JTAG/J-Link, halt core, read device ID register. Load "blinky", see GPIO toggle on scope → you have a debug channel.</li>
+      <li><strong>Boot firmware.</strong> UART printf → SPI-flash boot → DDR3.</li>
+      <li><strong>DDR3 bring-up.</strong> Run <strong>write leveling / read training / Vref training</strong>. On failure: scope DQS vs clock, check fly-by routing, sweep training delay manually, build read <strong>eye diagram</strong>. Record timing margin (ps).</li>
+      <li><strong>ADC validation.</strong> Clean low-distortion sine in. Capture N samples with <strong>coherent sampling</strong> (integer, ideally prime, cycles per record). FFT → <strong>SNR, SINAD, ENOB, THD, SFDR</strong>. DC ramp → <strong>histogram method</strong> for <strong>INL/DNL</strong>, plus gain &amp; offset error. Repeat over temp and Vdd. Plot ENOB vs temperature.</li>
+      <li><strong>Audio DAC validation.</strong> Digital full-scale tone via I²S → <strong>Audio Precision APx</strong>: THD+N, A-weighted dynamic range, frequency response flatness, channel crosstalk, PSRR (inject rail ripple, measure output). Level sweep to find THD+N knee.</li>
+      <li><strong>Serial interfaces.</strong> I²C 100 k/400 k/1 M: scope rise times vs spec mask, verify ACK. SPI: push to max rated clock, check setup/hold at slave.</li>
+      <li><strong>Power characterization.</strong> Active current at max clock, sleep/standby, <strong>IDDQ</strong> per rail, across temperature.</li>
+      <li><strong>Shmoo.</strong> Core: Vdd (0.9–1.3 V) × frequency (50–250 MHz), pass/fail at each point. Shape shows where the design is marginal and how much guardband the datasheet needs.</li>
+      <li><strong>Correlate.</strong> Hand INL/DNL/ENOB/power to PTE; when ATE reads 0.3 dB worse SNR, jointly isolate load board vs socket vs real limit, then set production limits with guardband.</li>
+      <li><strong>Feed back to Design.</strong> "DDR read window only 180 ps at hot/slow — below 250 ps target. Recommend adjusting default Vref code." That early debug-hook / DFT conversation is the JD's "engage early with Design teams".</li>
+    </ol>
+  </div>
+</details></section>
+
+<section><details>
+  <summary>3 · Concepts to have crisp</summary>
+  <div class="body">
+    <h3>Characterization fundamentals</h3>
+    <ul>
+      <li>PVT corners; process split lots (SS/TT/FF), skew lots</li>
+      <li>Shmoo plots, guardbanding, margin</li>
+      <li>Datasheet parameter → test method → instrument mapping (the SCM plan mindset)</li>
+      <li>Bench vs ATE: why they differ (loading, cal, socket parasitics, thermal) and how you correlate</li>
+    </ul>
+    <h3>DFT / test <span class="tag gap">study</span></h3>
+    <ul>
+      <li>Scan chains, ATPG, stuck-at vs at-speed</li>
+      <li>MBIST, LBIST, boundary scan (JTAG IEEE 1149.1)</li>
+      <li>IDDQ testing</li>
+      <li>Debug hooks to ask Design for: on-chip logic analyzer, register-readable status, analog test mux to a pin, clock/reset overrides</li>
+    </ul>
+    <h3>ADC / DAC / reference metrics <span class="tag strong">your bridge</span></h3>
+    <ul>
+      <li>Static: INL, DNL, offset error, gain error, missing codes, monotonicity</li>
+      <li>Dynamic: SNR, SINAD, ENOB, THD, SFDR, IMD</li>
+      <li>Methods: coherent sampling, windowing (non-coherent), histogram/code-density for INL/DNL, servo loop for offset</li>
+      <li>Voltage reference: initial accuracy, tempco (ppm/°C), 0.1–10 Hz noise, PSRR, long-term drift</li>
+      <li>Sigma-delta ADC: oversampling, noise shaping, <strong>decimation filter (CIC + FIR)</strong> — you built exactly this on the STM32</li>
+    </ul>
+    <p class="formula">ENOB = (SINAD − 1.76) / 6.02</p>
+    <h3>High-speed interface compliance <span class="tag gap">study</span></h3>
+    <ul>
+      <li>Eye diagram, mask testing, jitter decomposition (Rj / Dj / Tj, TJ@BER)</li>
+      <li>BER, bathtub curves, receiver stress / jitter-tolerance testing</li>
+      <li>Pre/de-emphasis, equalization (CTLE, DFE)</li>
+      <li>DDR3: write leveling, read/Vref training, tSU/tH, ODT · PCIe: CEM electrical, LTSSM link training, Gen1/2/3 · USB: eye masks, SI · HDMI/CSI: TMDS / D-PHY signalling</li>
+    </ul>
+    <h3>Lab instruments — what each measures</h3>
+    <ul>
+      <li>Real-time scope vs sampling / equivalent-time scope (when you need each)</li>
+      <li>BERT / pattern generator, arbitrary waveform generator (AWG)</li>
+      <li>Spectrum analyzer, phase-noise analyzer</li>
+      <li>SMU, precision DMM, electronic load</li>
+      <li><strong>Audio Precision APx</strong> — THD+N, dynamic range, frequency response, crosstalk, level sweeps <span class="tag strong">strongest match</span></li>
+      <li>Thermal: forced-air chamber, ThermoStream / Temptronic thermal forcing</li>
+    </ul>
+    <h3>Automation</h3>
+    <ul>
+      <li>SCPI over GPIB/USB/LAN, <strong>PyVISA</strong>, instrument driver abstraction</li>
+      <li>Test sequencing, data logging, automated PVT sweep loops, result DB + plotting</li>
+      <li>Frame your Python + Unity + CI work as reusable test infrastructure</li>
+    </ul>
+    <h3>ADI product context (skim tonight)</h3>
+    <ul>
+      <li>DSP: SHARC, Blackfin; <strong>SigmaDSP</strong> audio processors</li>
+      <li>MCU: ADuCM (Cortex-M), Maxim MAX32xxx; NPU: <strong>MAX78000 / MAX78002</strong> (Cortex-M4 + CNN accelerator) — likely close to this BU</li>
+      <li>Precision: AD76xx / AD40xx SAR ADCs, AD5xxx DACs, ADR/LT voltage references</li>
+      <li>Framing line: "bridge the physical and digital worlds at the Intelligent Edge"</li>
+    </ul>
+  </div>
+</details></section>
+
+<section><details>
+  <summary>4 · Positioning your experience</summary>
+  <div class="body">
+    <div class="tbl"><table>
+      <tr><th>JD requirement</th><th>Your evidence</th></tr>
+      <tr><td>MCU/processor <strong>test firmware</strong>, ARM Cortex</td><td>Bare-metal STM32F407 I²S+DMA driver at register level; FreeRTOS ARM FW on 15,000+ MSP432 devices</td></tr>
+      <tr><td>Silicon / HW <strong>bring-up, debug</strong></td><td>STM32 register-level bring-up; JTAG/GDB; QNX resmgr reply-buffer &amp; I/O-dispatch bugs "invisible in mock-only testing" — the "why bench matters" story</td></tr>
+      <tr><td><strong>Precision analog IP</strong> (ADC/DAC/refs)</td><td>PDM→PCM: 3-stage CIC + 16-tap Q15 FIR decimation = the sigma-delta ADC decimation path; biquad EQ; fixed-point Q15</td></tr>
+      <tr><td><strong>Audio Precision</strong> / audio validation</td><td>Sony HiFi DSP codec port &amp; optimize; TiVo DTS 5.1 SDK integration + end-to-end audio system test across codec configs/platforms; Oboe round-trip latency tool (loopback pulse + echo detection = a bench validation technique)</td></tr>
+      <tr><td>Automation in <strong>Python / C</strong></td><td>Python (NumPy/PyAudio) audio stack sim; Unity test suites (27 + 15 cases); GitHub Actions CI with cppcheck</td></tr>
+      <tr><td>Cross-functional with <strong>Design / PTE / Apps</strong></td><td>Sony cross-team SDK refactor + code reviews; Vogo embedded QA process owner; L&amp;T tech lead / delivery</td></tr>
+      <tr><td><strong>Serial protocols</strong> (I²C/SPI/UART)</td><td>I²S, register/DMA bring-up, CAN/BLE/GPS on Vogo devices</td></tr>
+      <tr><td><strong>Embedded toolchains</strong></td><td>GCC/qcc cross-compile, GDB, JTAG, QEMU; read up on IAR/Keil workflow</td></tr>
+    </table></div>
+    <h3>Your "why the switch" answer</h3>
+    <blockquote>"I've spent 13 years on the firmware side of the hardware/software boundary — bare-metal drivers, DSP data paths, register-level debug, audio system validation. Post-silicon evaluation is that same boundary, one layer down: proving the silicon itself. My DSP background maps directly onto precision ADC/DAC and audio characterization, and I already write the Python automation and test firmware this role runs on."</blockquote>
+  </div>
+</details></section>
+
+<section><details>
+  <summary>5 · Likely questions to drill</summary>
+  <div class="body">
+    <h3>Technical</h3>
+    <ul>
+      <li>Explain a sigma-delta ADC. Why a decimation filter? <em>(Lead with your CIC+FIR project.)</em></li>
+      <li>Measure the ENOB of an on-chip ADC on the bench? <em>(Clean tone, coherent sampling, FFT, windowing, SINAD → ENOB.)</em></li>
+      <li>Measure INL/DNL? <em>(Histogram / code-density method.)</em></li>
+      <li>Brand-new chip won't boot — walk me through debug. <em>(Rails → sequencing → clocks/PLL → reset → JTAG ID → GPIO toggle → UART → boot source.)</em></li>
+      <li>What's a shmoo plot and how do you use it?</li>
+      <li>DDR3 read data unreliable — how do you find timing margin? <em>(Sweep read delay / Vref, build eye, scope DQS vs clock.)</em></li>
+      <li>Why do bench and ATE results differ, and how do you correlate?</li>
+      <li>Automate a temperature characterization sweep? <em>(Chamber/ThermoStream control + SCPI instrument loop + logging.)</em></li>
+      <li>Measure PSRR / crosstalk on an audio DAC?</li>
+      <li>What is coherent sampling and why a prime number of cycles?</li>
+      <li>What DFT features would you ask a design team to add for debuggability?</li>
+    </ul>
+    <h3>Behavioral (STAR)</h3>
+    <ul>
+      <li>A bug others missed → QNX resmgr bugs invisible in mock testing; or a real-hardware DDR/audio glitch</li>
+      <li>Bring-up under time pressure</li>
+      <li>Disagreement with a design engineer / driving a cross-team decision</li>
+      <li>A time your test caught something before it shipped → TiVo audio system testing, or Vogo QA on 15,000 units</li>
+    </ul>
+    <h3>Questions to ask them</h3>
+    <ul>
+      <li>What silicon is currently in the lab, and what's the next tape-out?</li>
+      <li>How is the SCM plan split between DE, PTE, and Design?</li>
+      <li>Where does the team sit on bench-vs-ATE correlation pain today?</li>
+      <li>How much of the validation flow is already automated vs built per-project?</li>
+      <li>Is the NPU work here closer to the MAX78000 family?</li>
+    </ul>
+  </div>
+</details></section>
+
+<section><details>
+  <summary>6 · Honest gaps + your plan</summary>
+  <div class="body">
+    <p>Don't bluff these — name them and show a path:</p>
+    <ul>
+      <li><strong>True PVT characterization / shmoo / corner-lot work</strong> — done functional and system validation, not full silicon characterization</li>
+      <li><strong>High-speed electrical compliance</strong> (PCIe/USB/HDMI eye/jitter/BER) — understand the theory, haven't run the suites</li>
+      <li><strong>ATE / PTE correlation</strong> — worked adjacent to production QA (Vogo), not on a tester</li>
+      <li><strong>DFT internals</strong> (scan/ATPG/MBIST) — need to study; know JTAG/boundary-scan from the firmware side</li>
+      <li><strong>IAR/Keil</strong> — used GCC/GDB toolchains; quick ramp</li>
+    </ul>
+    <blockquote>"Staff level here is about judgment and cross-functional drive, which I have. The characterization-specific toolset I'd ramp on in the first months — the DSP measurement fundamentals and the automation I already bring."</blockquote>
+  </div>
+</details></section>
+
+<section><details open>
+  <summary>7 · Tonight's checklist</summary>
+  <div class="body">
+    <ul class="check">
+      <li>Re-derive ENOB = (SINAD − 1.76) / 6.02 and explain every term</li>
+      <li>Sketch a shmoo plot and an eye diagram on paper, explain both</li>
+      <li>Write the boot-debug decision tree from the worked example</li>
+      <li>Rehearse the QNX "mock-only testing missed it" story as a 90-second STAR</li>
+      <li>Rehearse the CIC+FIR / sigma-delta connection out loud</li>
+      <li>Skim ADI: SigmaDSP, SHARC, MAX78000, one precision SAR ADC datasheet spec table (that <em>is</em> an SCM plan)</li>
+      <li>20 min: DDR3 write-leveling &amp; read training basics</li>
+      <li>15 min: scan / ATPG / MBIST — just the definitions</li>
+      <li>Prepare 4 questions to ask them</li>
+      <li>Say the "why ADI / why post-silicon" answer out loud twice</li>
+    </ul>
+  </div>
+</details></section>
+
+<footer>
+  Built as personal interview prep · not affiliated with Analog Devices, Inc.
+</footer>
+</main>
+
+<script>
+  // Remember which sections were open, per device.
+  try {
+    const KEY = "adi-prep-open";
+    const saved = JSON.parse(localStorage.getItem(KEY) || "null");
+    const secs = [...document.querySelectorAll("details")];
+    if (Array.isArray(saved)) secs.forEach((d, i) => { if (typeof saved[i] === "boolean") d.open = saved[i]; });
+    const save = () => { try { localStorage.setItem(KEY, JSON.stringify(secs.map(d => d.open))); } catch (e) {} };
+    secs.forEach(d => d.addEventListener("toggle", save));
+  } catch (e) {}
+</script>
+</body>
+</html>
